@@ -1,5 +1,5 @@
 # YouthLearn
-青年大学习最后完成图，青年大学习打卡
+青年大学习最后完成图，青年大学习打卡,本程序仅供学习！
 ## 青年大学习，解析青年大学习的完成图(最后一页的结尾图)
 
 - 1、将代码文件下载到你的服务器或主机中，尽量使用有公网ip或一些可以被解析的主机，因为微信无法访问内网的ip(192.168.1.x之类的)，网站通过ua识别拦截非微信访问的请求，必须使用微信访问
@@ -8,10 +8,10 @@
 
 - [![pPemuQK.jpg](https://s1.ax1x.com/2023/08/09/pPemuQK.jpg)](https://imgse.com/i/pPemuQK)
 
-- 3、我们需要对该网站进行一个初始化，在初始化之前，我们还需要将settings.php的权限更改为777,因为我们使用setup.php初始化时，安装程序会自动对setting.php进行修改，因此需要让settings.php具有被修改的权限，否则配置保存不成功，当然也可以补救，就是手动修改settings.php文件
+- 3、我们需要对该网站进行一个初始化，在初始化之前，我们还需要将settings.php的权限更改为777,因为我们使用setup.php初始化时，安装程序会自动对settings.php进行修改，因此需要让settings.php具有被修改的权限，否则配置保存不成功，当然也可以补救，就是手动修改settings.php文件
 
   ```
-  chmod 777 setting.php
+  chmod 777 settings.php
   ```
 
   [![pPeeD8x.jpg](https://s1.ax1x.com/2023/08/09/pPeeD8x.jpg)](https://imgse.com/i/pPeeD8x)
