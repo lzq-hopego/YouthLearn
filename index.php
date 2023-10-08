@@ -4,17 +4,14 @@
  * @Date: 2023-08-09 19:47:41
  * @文件最后编辑者: lizhanqi lzq-hopego
  */
+
+ // 使用微信的ua进行判断平台，如果不是微信则返回一句话
 $ua = $_SERVER['HTTP_USER_AGENT'];
 if(strpos($ua,'Weixin') ==false){
     echo "<title>警告</title><h1 style='text-align:center;color:red;'>请使用微信访问!</h1>";
     exit;
 }
 ?>
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="zh-hans">
