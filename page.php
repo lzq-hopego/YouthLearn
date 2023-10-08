@@ -1,101 +1,53 @@
 
 <?php
 
-include ("settings.php");
-
-
 /*
  * @作者: lizhanqi lzq-hopego
  * @Date: 2023-08-09 19:47:41
  * @文件最后编辑者: lizhanqi lzq-hopego
  */
+
+// 使用微信的ua进行判断平台，如果不是微信则返回一句话
 $ua = $_SERVER['HTTP_USER_AGENT'];
 if(strpos($ua,'Weixin') ==false){
     echo "<title>警告</title><h1 style='text-align:center;color:red;'>请使用微信访问!</h1>";
     exit;
 }
+#获取post的信息
 $q = $_POST["url"];
-
+#对post的信息进行初步校验，不正确则返回到上一个网页
 if(strpos($q,'h5.cyol.com') ==false){
     echo "<script type='text/javascript'>history.go(-1)</script>";
     exit;
 }
-
-
-function get_url_title($q){
-    if ($q != ''){
-    @$handle = fopen ($q, "rb"); 
-    $contents = ""; 
-    do { 
-    @$data = fread($handle, 1024); 
-    if (strlen($data) == 0) { 
-    break; 
-    } 
-    $contents .= $data; 
-    
-    } while(true); 
-    @fclose ($handle); 
+// 获取青年大学习的标题,有两种返回值,一种是False一种是数组,数组则带有标题和完成图
+function geturl($url){
+    $panduan=strstr($url,"https://h5.cyol.com/special/daxuexi/");
+    if ($panduan==False){
+        return False;
     }
-    $title=explode('</',explode('title>',$contents)[1])[0];
-    if ($title==''){
-        $title='';
-    }
-    $img_url=str_replace("m.html","images/end.jpg",$q);
-    return array($title,$img_url);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); 
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE); 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $output = curl_exec($ch);
+    curl_close($ch);
+    preg_match("/<title>(.*)<\/title>/",$output,$t);
+    $img_url=str_replace("m.html","images/end.jpg",$url);
+    $ls=array($t[1],$img_url);
+    return $ls;
 }
-function get_ip($q){
-    if ($q != ''){
-    @$handle = fopen ($q, "rb"); 
-    $contents = ""; 
-    do { 
-    @$data = fread($handle, 1024); 
-    if (strlen($data) == 0) { 
-    break; 
-    } 
-    $contents .= $data; 
-    
-    } while(true); 
-    @fclose ($handle); 
-    }
-    // $title=explode('</',explode('title>',$contents)[1])[0];
-    $d=json_decode($contents, true);
-    // if ($title==''){
-    //     $title='';
-    // }
-    // $img_url=str_replace("m.html","images/end.jpg",$q);
-    // echo $contents;
-    return $d['area'];
+
+// 判断返回值,如何为False则返回上一个网页
+$arr=geturl($q);
+if ($arr==False){
+    echo "<script type='text/javascript'>history.go(-1)</script>";
+    exit;
 }
-$arr=get_url_title($q);
+// 获取数据
 $title=$arr[0];
 $img_url=$arr[1];
-
-$ip=$_SERVER['REMOTE_ADDR'].' - '.get_ip('http://api.ip33.com/ip/search?s='.$_SERVER['REMOTE_ADDR']);
-
-?>
-
-<?php
-
-
-// 创建连接
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-// 检测连接
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
- 
-$sql = "INSERT INTO qn_learn_list (ip, url,title,add_time,add_name)
-VALUES ('".$ip."', '".$q."', '".$title."','".date('Y-m-d H:i:s')."','".$ua."')";
- 
-if (mysqli_query($conn, $sql)) {
-   
-} else {
-    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-}
-mysqli_close($conn);
-
-
-
 ?>
 
 
